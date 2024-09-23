@@ -100,4 +100,33 @@ class Ars_Service_Admin {
 
 	}
 
+	public function add_plugin_page()
+	{
+
+		add_menu_page(
+			__('Ars Service', 'ars-service'),
+			__('Ars Service', 'ars-service'),
+			'manage_options',
+			'ars-service-info',
+			function () {
+				include 'partials/ars-service-admin-info-page.php';
+			},
+			'dashicons-admin-generic'
+		);
+
+		add_submenu_page(
+			'ars-service-info',
+			__('Logs', 'ars-service'),
+			__('Logs', 'ars-service'),
+			'manage_options',
+			'ars-service-logs',
+			function () {
+				include 'partials/ars-service-admin-logs-page.php';
+			}
+		);
+
+	}
+
+
+
 }
