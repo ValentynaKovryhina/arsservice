@@ -2,3 +2,125 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+.ars_container {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+    .ars_container {
+        max-width: 100%;
+    }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+    .ars_container {
+        max-width: 540px;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    .ars_container {
+        max-width: 720px;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .ars_container {
+        max-width: 960px;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .ars_container {
+        max-width: 1140px;
+    }
+}
+
+/* Extra extra large devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) {
+    .ars_container {
+        max-width: 1320px;
+    }
+}
+
+.ars_order_form {
+    max-width: 800px;
+}
+
+.ars_form_block {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.ars_form_button_block {
+    justify-content: flex-start;
+    margin-top: 20px;
+}
+
+.ars_form_button_block .button-secondary {
+    margin-right: 20px;
+}
+
+.ars_form_block:first-child {
+    margin-top: 0;
+}
+
+.ars_form_group {
+    width: calc(50% - 20px);
+}
+
+.ars_form_checkboxes_group {
+    display: flex;
+    flex-direction: column;
+}
+
+.ars_form_checkboxes_group .ars_form_group {
+    width: 100%;
+}
+
+.ars_form_checkboxes_block + .ars_form_group {
+    margin-top: auto;
+}
+
+.ars_form_group_heading {
+    width: 100%;
+    margin: 0 0 10px 0;
+}
+
+.ars_form_group label,
+.ars_form_group select,
+.ars_form_group textarea,
+.ars_form_group:not(.ars_form_checkboxes_group) input {
+    width: 100%;
+    display: block;
+}
+
+.ars_form_group label input {
+    margin-top: 1px;
+    margin-right: 8px;
+}
+
+.ars_form_checkboxes_block {
+    column-count: 2;
+    margin-bottom: 10px;
+}
+
+.ars_form_checkboxes_block label {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    cursor: pointer;
+    line-height: 1;
+    break-inside: avoid;
+}

@@ -116,6 +116,17 @@ class Ars_Service_Admin {
 
 		add_submenu_page(
 			'ars-service-info',
+			__('Create Order', 'ars-service'),
+			__('Create Order', 'ars-service'),
+			'manage_options',
+			'ars-create-order',
+			function () {
+				include 'partials/ars-service-admin-create-order-page.php';
+			}
+		);
+
+		add_submenu_page(
+			'ars-service-info',
 			__('Logs', 'ars-service'),
 			__('Logs', 'ars-service'),
 			'manage_options',
