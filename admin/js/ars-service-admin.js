@@ -28,6 +28,9 @@ jQuery(document).ready(function ($) {
             data.status = form.find('#status').val();
             data.reported_failure = form.find('#reported_failure').val();
             data.comment = form.find('#comment').val();
+            data.date = form.find('#date').val();
+            data.appearance_comment = form.find('#appearance_comment').val();
+            data.complete_comment = form.find('#complete_comment').val();
 
 
 

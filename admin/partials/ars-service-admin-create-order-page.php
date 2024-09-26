@@ -1,8 +1,30 @@
 <div class="ars_container">
 
-
     <h1><?php _e( 'Create new order', 'ars-service' ); ?></h1>
     <p><?php _e( 'Welcome to the Ars Service Plugin.', 'ars-service' ); ?></p>
+
+	<?php
+
+	// get data if we have get parameter
+	if ( isset( $_GET['ars-order'] ) ) {
+		$id = $_GET['ars-order'];
+		global $wpdb;
+		$order = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}ars_orders WHERE id = %d", $id ), ARRAY_A );
+
+		if ( $order && is_array( $order ) && ! empty( $order ) ) {
+
+			echo '<pre>';
+			var_dump( '$order' );
+			var_dump( $order );
+			echo '</pre>';
+
+		} else {
+			$order = [];
+		}
+	}
+
+
+	?>
 
 
     <form id='ars_order_form' class='ars_order_form'>
@@ -14,12 +36,16 @@
 
             <div class="ars_form_group">
                 <label for="client_name"><?php _e( 'ФИО *', 'ars-service' ); ?></label>
-                <input type="text" id="client_name" name="client_name" required>
+                <input type="text" id="client_name" name="client_name"
+                       value="<?php echo isset( $order['client_name'] ) && $order['client_name'] ? $order['client_name'] : ''; ?>"
+                       required>
             </div>
 
             <div class="ars_form_group">
                 <label for="address"><?php _e( 'Адрес *', 'ars-service' ); ?></label>
-                <input type="text" id="address" name="address" required>
+                <input type="text" id="address" name="address"
+                       value="<?php echo isset( $order['address'] ) && $order['address'] ? $order['address'] : ''; ?>"
+                       required>
             </div>
 
         </div>
@@ -28,12 +54,16 @@
 
             <div class="ars_form_group">
                 <label for="phone"><?php _e( 'Телефон *', 'ars-service' ); ?></label>
-                <input type="text" id="phone" name="phone" required>
+                <input type="text" id="phone" name="phone"
+                       value="<?php echo isset( $order['phone'] ) && $order['phone'] ? $order['phone'] : ''; ?>"
+                       required>
             </div>
 
             <div class="ars_form_group">
                 <label for="document"><?php _e( 'Документ *', 'ars-service' ); ?></label>
-                <input type="text" id="document" name="document" required>
+                <input type="text" id="document" name="document"
+                       value="<?php echo isset( $order['document'] ) && $order['document'] ? $order['document'] : ''; ?>"
+                       required>
             </div>
 
         </div>
@@ -44,12 +74,16 @@
 
             <div class="ars_form_group">
                 <label for="id"><?php _e( 'ID', 'ars-service' ); ?></label>
-                <input type="text" id="id" name="id" readonly>
+                <input type="text" id="id" name="id"
+                       value="<?php echo isset( $order['id'] ) && $order['id'] ? $order['id'] : ''; ?>"
+                       readonly>
             </div>
 
             <div class="ars_form_group">
                 <label for="device"><?php _e( 'Устройство *', 'ars-service' ); ?></label>
-                <input type="text" id="device" name="device" required>
+                <input type="text" id="device" name="device"
+                       value="<?php echo isset( $order['device'] ) && $order['device'] ? $order['device'] : ''; ?>"
+                       required>
             </div>
 
         </div>
@@ -58,12 +92,15 @@
 
             <div class="ars_form_group">
                 <label for="date"><?php _e( 'Дата создания', 'ars-service' ); ?></label>
-                <input type="text" id="date" name="date" readonly>
+                <input type="text" id="date" name="date"
+                       value="<?php echo isset( $order['date'] ) && $order['date'] ? $order['date'] : ''; ?>"
+                       readonly>
             </div>
 
             <div class="ars_form_group">
                 <label for="price"><?php _e( 'Стоимость', 'ars-service' ); ?></label>
-                <input type="number" id="price" name="price">
+                <input type="number" id="price" name="price"
+                       value="<?php echo isset( $order['price'] ) && $order['price'] ? $order['price'] : ''; ?>">
             </div>
 
         </div>
@@ -72,17 +109,21 @@
 
             <div class="ars_form_group">
                 <label for="sn"><?php _e( 'S/N *', 'ars-service' ); ?></label>
-                <input type="text" id="sn" name="sn" required>
+                <input type="text" id="sn" name="sn"
+                       value="<?php echo isset( $order['sn'] ) && $order['sn'] ? $order['sn'] : ''; ?>"
+                       required>
             </div>
+
+			<?php $status = isset( $order['status'] ) && $order['status'] ? intval( $order['status'] ) : 0; ?>
 
             <div class="ars_form_group">
                 <label for="status"><?php _e( 'Статус *', 'ars-service' ); ?></label>
                 <select id="status" name="status" required>
-                    <option value="0"></option>
-                    <option value="1"><?php _e( 'Принят на сервис', 'ars-service' ); ?></option>
-                    <option value="2"><?php _e( 'Ожидает детали', 'ars-service' ); ?></option>
-                    <option value="3"><?php _e( 'Готов', 'ars-service' ); ?></option>
-                    <option value="4"><?php _e( 'Выдан клиенту', 'ars-service' ); ?></option>
+                    <option value="0" <?php echo $status === 0 ? 'selected' : ''; ?> ></option>
+                    <option value="1" <?php echo $status === 1 ? 'selected' : ''; ?> ><?php _e( 'Принят на сервис', 'ars-service' ); ?></option>
+                    <option value="2" <?php echo $status === 2 ? 'selected' : ''; ?> ><?php _e( 'Ожидает детали', 'ars-service' ); ?></option>
+                    <option value="3" <?php echo $status === 3 ? 'selected' : ''; ?> ><?php _e( 'Готов', 'ars-service' ); ?></option>
+                    <option value="4" <?php echo $status === 4 ? 'selected' : ''; ?> ><?php _e( 'Выдан клиенту', 'ars-service' ); ?></option>
                 </select>
             </div>
 
@@ -137,8 +178,8 @@
                 </div>
 
                 <div class="ars_form_group">
-                    <label for="other1"><?php _e( 'Другое', 'ars-service' ); ?></label>
-                    <textarea type="text" id="other1" name="other1"></textarea>
+                    <label for="complete_comment"><?php _e( 'Другое', 'ars-service' ); ?></label>
+                    <textarea type="text" id="complete_comment" name="complete_comment"><?php echo isset( $order['complete_comment'] ) && $order['complete_comment'] ? $order['complete_comment'] : ''; ?></textarea>
                 </div>
 
             </div>
@@ -180,8 +221,8 @@
                 </div>
 
                 <div class="ars_form_group">
-                    <label for="other2"><?php _e( 'Другое', 'ars-service' ); ?></label>
-                    <textarea type="text" id="other2" name="other2"></textarea>
+                    <label for="appearance_comment"><?php _e( 'Другое', 'ars-service' ); ?></label>
+                    <textarea type="text" id="appearance_comment" name="appearance_comment"><?php echo isset( $order['appearance_comment'] ) && $order['appearance_comment'] ? $order['appearance_comment'] : ''; ?></textarea>
                 </div>
 
             </div>
@@ -191,12 +232,12 @@
         <div class="ars_form_block">
             <div class="ars_form_group">
                 <label for="reported_failure"><?php _e( 'Заявленная неисправность *', 'ars-service' ); ?></label>
-                <textarea id="reported_failure" name="reported_failure" required></textarea>
+                <textarea id="reported_failure" name="reported_failure" required><?php echo isset( $order['reported_failure'] ) && $order['reported_failure'] ? $order['reported_failure'] : ''; ?></textarea>
             </div>
 
             <div class="ars_form_group">
                 <label for="comment"><?php _e( 'Комментарий', 'ars-service' ); ?></label>
-                <textarea type="text" id="comment" name="comment"></textarea>
+                <textarea id="comment" name="comment"><?php echo isset( $order['comment'] ) && $order['comment'] ? $order['comment'] : ''; ?></textarea>
             </div>
         </div>
 

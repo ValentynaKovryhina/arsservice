@@ -159,21 +159,24 @@ class Ars_Service_Admin {
 
 		// TODO Validation
 		// TODO check that S/N is unique
+		// TODO move data to separate function
 
 		global $wpdb;
 
 
 		$data = [
-			'sn'               => sanitize_text_field( $_POST['sn'] ),
-			'client_name'      => sanitize_text_field( $_POST['client_name'] ),
-			'address'          => sanitize_text_field( $_POST['address'] ),
-			'phone'            => sanitize_text_field( $_POST['phone'] ),
-			'document'         => sanitize_text_field( $_POST['document'] ),
-			'reported_failure' => sanitize_text_field( $_POST['reported_failure'] ),
-			'comment'          => sanitize_text_field( $_POST['comment'] ),
-			'device'           => sanitize_text_field( $_POST['device'] ),
-			'price'            => intval( $_POST['price'] ),
-			'status'           => intval( $_POST['status'] ),
+			'sn'                 => sanitize_text_field( $_POST['sn'] ),
+			'client_name'        => sanitize_text_field( $_POST['client_name'] ),
+			'address'            => sanitize_text_field( $_POST['address'] ),
+			'phone'              => sanitize_text_field( $_POST['phone'] ),
+			'document'           => sanitize_text_field( $_POST['document'] ),
+			'reported_failure'   => sanitize_text_field( $_POST['reported_failure'] ),
+			'comment'            => sanitize_text_field( $_POST['comment'] ),
+			'complete_comment'   => sanitize_text_field( $_POST['complete_comment'] ),
+			'appearance_comment' => sanitize_text_field( $_POST['appearance_comment'] ),
+			'device'             => sanitize_text_field( $_POST['device'] ),
+			'price'              => intval( $_POST['price'] ),
+			'status'             => intval( $_POST['status'] ),
 		];
 
 		// check id
@@ -184,6 +187,11 @@ class Ars_Service_Admin {
 			$success_message = 'Запись создана успешно';
 		}
 
+		if ( isset( $_POST['date'] ) && ! empty( $_POST['date'] ) ) {
+			$data['date'] = $_POST['date'];
+		}
+
+		// todo prepare format
 		$insert = $wpdb->replace( $wpdb->prefix . 'ars_orders', $data );
 
 		if ( $insert === false ) {
@@ -195,8 +203,7 @@ class Ars_Service_Admin {
 		}
 
 		$inserted_id = $wpdb->insert_id;
-		wp_send_json_success( [ 'message' => $success_message, 'id' => $inserted_id ] );
-
+		wp_send_json_success( [ 'message' => $success_message, 'id' => $inserted_id, 'post' => $_POST ] );
 
 
 	}
