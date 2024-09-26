@@ -5,13 +5,14 @@
 
 	<?php
 
-	$order = [];
-	$additional_info = [];
+	$order = $additional_info = $comments = [];
 
 	// get data if we have get parameter
 	if ( isset( $_GET['ars-order'] ) ) {
 		$id = $_GET['ars-order'];
 		global $wpdb;
+
+		// get data from database
 		$order = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}ars_orders WHERE id = %d", $id ), ARRAY_A );
 
 		if ( $order && is_array( $order ) && ! empty( $order ) ) {
@@ -19,6 +20,20 @@
 			$additional_info = unserialize( $order['additional_info'] );
 			$additional_info = is_array( $additional_info ) ? $additional_info : [];
 
+		}
+
+		// get comments
+		$comments = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}ars_comments WHERE order_id = %d", $id ), ARRAY_A );
+
+		if ( $comments && is_array( $comments ) && ! empty( $comments ) ) {
+//            foreach ( $comments as $comment ) {
+//                echo '<p>' . $comment['comment'] . '</p>';
+//            }
+
+			echo '<pre>';
+			var_dump( '$comments' );
+			var_dump( $comments );
+			echo '</pre>';
 		}
 	}
 
@@ -282,7 +297,7 @@
 
                 <div class="ars_form_group">
                     <label for="appearance_comment"><?php _e( 'Другое', 'ars-service' ); ?></label>
-                    <textarea type="text" id="appearance_comment"
+                    <textarea id="appearance_comment"
                               name="appearance_comment"><?php echo isset( $order['appearance_comment'] ) && $order['appearance_comment'] ? $order['appearance_comment'] : ''; ?></textarea>
                 </div>
 
@@ -292,17 +307,39 @@
 
         <div class="ars_form_block">
             <div class="ars_form_group">
-                <label for="reported_failure"><?php _e( 'Заявленная неисправность *', 'ars-service' ); ?></label>
+                <h4 class="ars_form_group_heading"><?php _e( 'Заявленная неисправность *', 'ars-service' ); ?></h4>
                 <textarea id="reported_failure" name="reported_failure"
                           required><?php echo isset( $order['reported_failure'] ) && $order['reported_failure'] ? $order['reported_failure'] : ''; ?></textarea>
             </div>
 
-            <div class="ars_form_group">
-                <label for="comment"><?php _e( 'Комментарий', 'ars-service' ); ?></label>
-                <textarea id="comment"
-                          name="comment"><?php echo isset( $order['comment'] ) && $order['comment'] ? $order['comment'] : ''; ?></textarea>
-            </div>
+			<?php if ( empty( $comments ) ) : ?>
+                <div class="ars_form_group">
+                    <h4 class="ars_form_group_heading"><?php _e( 'Комментарий', 'ars-service' ); ?></h4>
+                    <textarea id="comment" name="comment"></textarea>
+                </div>
+			<?php endif; ?>
+
         </div>
+
+		<?php if ( ! empty( $comments ) ) : ?>
+
+            <h4 class="ars_form_group_heading"><?php _e( 'Комментарии', 'ars-service' ); ?></h4>
+
+            <div class="ars_form_group">
+                <textarea id="comment"
+                          name="comment" placeholder="<?php _e( 'Написать комментарий...', 'ars-service' ); ?>"></textarea>
+            </div>
+
+			<?php foreach ( $comments as $comment ) :
+                $date = new DateTime($comment['date']);
+                $date_text = $date->format('d.m.Y H:i');?>
+                <div class="ars_form_group">
+                    <p><?php echo $comment['comment']; ?></p>
+                    <span><?php echo $date_text; ?></span>
+                </div>
+			<?php endforeach; ?>
+
+		<?php endif; ?>
 
         <div class="ars_form_block ars_form_button_block">
             <button type="reset" class="button button-secondary"><?php _e( 'Отменить', 'ars-service' ); ?></button>

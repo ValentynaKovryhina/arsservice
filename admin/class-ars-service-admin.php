@@ -171,7 +171,7 @@ class Ars_Service_Admin {
 			'phone'              => sanitize_text_field( $_POST['phone'] ),
 			'document'           => sanitize_text_field( $_POST['document'] ),
 			'reported_failure'   => sanitize_text_field( $_POST['reported_failure'] ),
-			'comment'            => sanitize_text_field( $_POST['comment'] ),
+//			'comment'            => sanitize_text_field( $_POST['comment'] ),
 			'complete_comment'   => sanitize_text_field( $_POST['complete_comment'] ),
 			'appearance_comment' => sanitize_text_field( $_POST['appearance_comment'] ),
 			'device'             => sanitize_text_field( $_POST['device'] ),
@@ -208,6 +208,16 @@ class Ars_Service_Admin {
 		}
 
 		$inserted_id = $wpdb->insert_id;
+
+		// insert comment
+		if ( isset( $_POST['comment'] ) && ! empty( $_POST['comment'] ) ) {
+			$comment_data = [
+				'order_id' => $inserted_id,
+				'comment'  => sanitize_text_field( $_POST['comment'] ),
+			];
+			$wpdb->insert( $wpdb->prefix . 'ars_comments', $comment_data );
+		}
+
 		wp_send_json_success( [ 'message' => $success_message, 'id' => $inserted_id, 'post' => $_POST ] );
 
 
