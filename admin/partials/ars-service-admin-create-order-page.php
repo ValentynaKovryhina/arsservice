@@ -5,6 +5,9 @@
 
 	<?php
 
+	$order = [];
+	$additional_info = [];
+
 	// get data if we have get parameter
 	if ( isset( $_GET['ars-order'] ) ) {
 		$id = $_GET['ars-order'];
@@ -13,22 +16,16 @@
 
 		if ( $order && is_array( $order ) && ! empty( $order ) ) {
 
-			echo '<pre>';
-			var_dump( '$order' );
-			var_dump( $order );
-			echo '</pre>';
+			$additional_info = unserialize( $order['additional_info'] );
+			$additional_info = is_array( $additional_info ) ? $additional_info : [];
 
-		} else {
-			$order = [];
 		}
 	}
-
 
 	?>
 
 
     <form id='ars_order_form' class='ars_order_form'>
-
 
         <div class="ars_form_block">
 
@@ -139,47 +136,77 @@
 
                 <div class="ars_form_checkboxes_block">
 
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Телевизор"> <?php _e( 'Телевизор', 'ars-service' ); ?>
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="tv" <?php echo in_array( "tv", $additional_info ) ? 'checked' : ''; ?> > <?php _e( 'Телевизор', 'ars-service' ); ?>
                     </label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Монитор"> <?php _e( 'Монитор', 'ars-service' ); ?>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="monitor" <?php echo in_array( "monitor", $additional_info ) ? 'checked' : ''; ?> > <?php _e( 'Монитор', 'ars-service' ); ?>
                     </label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Ноутбук"> <?php _e( 'Ноутбук', 'ars-service' ); ?>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="laptop" <?php echo in_array( "laptop", $additional_info ) ? 'checked' : ''; ?> > <?php _e( 'Ноутбук', 'ars-service' ); ?>
                     </label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Планшет"> <?php _e( 'Планшет', 'ars-service' ); ?>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="tablet" <?php echo in_array( "tablet", $additional_info ) ? 'checked' : ''; ?> > <?php _e( 'Планшет', 'ars-service' ); ?>
                     </label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Телефон"> <?php _e( 'Телефон', 'ars-service' ); ?>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="cellphone" <?php echo in_array( "cellphone", $additional_info ) ? 'checked' : ''; ?> > <?php _e( 'Телефон', 'ars-service' ); ?>
                     </label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Системный блок"> <?php _e( 'Системный блок', 'ars-service' ); ?></label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Принтер"> <?php _e( 'Принтер', 'ars-service' ); ?>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="system_block" <?php echo in_array( "system_block", $additional_info ) ? 'checked' : ''; ?> > <?php _e( 'Системный блок', 'ars-service' ); ?>
                     </label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Лазерный картридж"> <?php _e( 'Лазерный картридж', 'ars-service' ); ?></label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Струйный картридж"> <?php _e( 'Струйный картридж', 'ars-service' ); ?></label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Кабеля"> <?php _e( 'Кабеля', 'ars-service' ); ?>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="printer" <?php echo in_array( "printer", $additional_info ) ? 'checked' : ''; ?> > <?php _e( 'Принтер', 'ars-service' ); ?>
                     </label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Коробка"> <?php _e( 'Коробка', 'ars-service' ); ?>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="laser_cartridge" <?php echo in_array( "laser_cartridge", $additional_info ) ? 'checked' : ''; ?> > <?php _e( 'Лазерный картридж', 'ars-service' ); ?>
                     </label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Упаковка"> <?php _e( 'Упаковка', 'ars-service' ); ?>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="inkjet_cartridge" <?php echo in_array( "inkjet_cartridge", $additional_info ) ? 'checked' : ''; ?> > <?php _e( 'Струйный картридж', 'ars-service' ); ?>
                     </label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Зарядное устройство"> <?php _e( 'Зарядное устройство', 'ars-service' ); ?>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="cables" <?php echo in_array( "cables", $additional_info ) ? 'checked' : ''; ?> > <?php _e( 'Кабеля', 'ars-service' ); ?>
                     </label>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="box" <?php echo in_array( "box", $additional_info ) ? 'checked' : ''; ?> > <?php _e( 'Коробка', 'ars-service' ); ?>
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="packaging" <?php echo in_array( "packaging", $additional_info ) ? 'checked' : ''; ?> > <?php _e( 'Упаковка', 'ars-service' ); ?>
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="charger" <?php echo in_array( "charger", $additional_info ) ? 'checked' : ''; ?> > <?php _e( 'Зарядное устройство', 'ars-service' ); ?>
+                    </label>
+
                 </div>
 
                 <div class="ars_form_group">
                     <label for="complete_comment"><?php _e( 'Другое', 'ars-service' ); ?></label>
-                    <textarea type="text" id="complete_comment" name="complete_comment"><?php echo isset( $order['complete_comment'] ) && $order['complete_comment'] ? $order['complete_comment'] : ''; ?></textarea>
+                    <textarea type="text" id="complete_comment"
+                              name="complete_comment"><?php echo isset( $order['complete_comment'] ) && $order['complete_comment'] ? $order['complete_comment'] : ''; ?></textarea>
                 </div>
 
             </div>
@@ -190,39 +217,73 @@
 
                 <div class="ars_form_checkboxes_block">
 
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Явные следы эксплуатации"> <?php _e( 'Явные следы эксплуатации', 'ars-service' ); ?>
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="clear_signs_of_use" <?php echo in_array( "clear_signs_of_use", $additional_info ) ? 'checked' : ''; ?> >
+						<?php _e( 'Явные следы эксплуатации', 'ars-service' ); ?>
                     </label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Без видимых следов эксплуатации"> <?php _e( 'Без видимых следов эксплуатации', 'ars-service' ); ?>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="no_visible_signs_of_use" <?php echo in_array( "no_visible_signs_of_use", $additional_info ) ? 'checked' : ''; ?> >
+						<?php _e( 'Без видимых следов эксплуатации', 'ars-service' ); ?>
                     </label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Наслоение потожировых следов"> <?php _e( 'Наслоение потожировых следов', 'ars-service' ); ?>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="layering_of_sweat_marks" <?php echo in_array( "layering_of_sweat_marks", $additional_info ) ? 'checked' : ''; ?> >
+						<?php _e( 'Наслоение потожировых следов', 'ars-service' ); ?>
                     </label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Следы влаги"> <?php _e( 'Следы влаги', 'ars-service' ); ?></label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Вмятины"> <?php _e( 'Вмятины', 'ars-service' ); ?>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="moisture_marks" <?php echo in_array( "moisture_marks", $additional_info ) ? 'checked' : ''; ?> >
+						<?php _e( 'Следы влаги', 'ars-service' ); ?>
                     </label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Мелкие царапины"> <?php _e( 'Мелкие царапины', 'ars-service' ); ?></label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Глубокие царапины"> <?php _e( 'Глубокие царапины', 'ars-service' ); ?></label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Внешние повреждения"> <?php _e( 'Внешние повреждения', 'ars-service' ); ?>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="dents" <?php echo in_array( "dents", $additional_info ) ? 'checked' : ''; ?> >
+						<?php _e( 'Вмятины', 'ars-service' ); ?>
                     </label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Наслоение стороннего вещества"> <?php _e( 'Наслоение стороннего вещества', 'ars-service' ); ?>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="minor_scratches" <?php echo in_array( "minor_scratches", $additional_info ) ? 'checked' : ''; ?> >
+						<?php _e( 'Мелкие царапины', 'ars-service' ); ?>
                     </label>
-                    <label><input type="checkbox" name="checkboxes"
-                                  value="Следы ударов/падения"> <?php _e( 'Следы ударов/падения', 'ars-service' ); ?>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="deep_scratches" <?php echo in_array( "deep_scratches", $additional_info ) ? 'checked' : ''; ?> >
+						<?php _e( 'Глубокие царапины', 'ars-service' ); ?>
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="external_damage" <?php echo in_array( "external_damage", $additional_info ) ? 'checked' : ''; ?> >
+						<?php _e( 'Внешние повреждения', 'ars-service' ); ?>
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="deposition_of_foreign_matter" <?php echo in_array( "deposition_of_foreign_matter", $additional_info ) ? 'checked' : ''; ?> >
+						<?php _e( 'Наслоение стороннего вещества', 'ars-service' ); ?>
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="ars_checkboxes"
+                               value="shock_drop_marks" <?php echo in_array( "shock_drop_marks", $additional_info ) ? 'checked' : ''; ?> >
+						<?php _e( 'Следы ударов/падения', 'ars-service' ); ?>
                     </label>
 
                 </div>
 
+
                 <div class="ars_form_group">
                     <label for="appearance_comment"><?php _e( 'Другое', 'ars-service' ); ?></label>
-                    <textarea type="text" id="appearance_comment" name="appearance_comment"><?php echo isset( $order['appearance_comment'] ) && $order['appearance_comment'] ? $order['appearance_comment'] : ''; ?></textarea>
+                    <textarea type="text" id="appearance_comment"
+                              name="appearance_comment"><?php echo isset( $order['appearance_comment'] ) && $order['appearance_comment'] ? $order['appearance_comment'] : ''; ?></textarea>
                 </div>
 
             </div>
@@ -232,12 +293,14 @@
         <div class="ars_form_block">
             <div class="ars_form_group">
                 <label for="reported_failure"><?php _e( 'Заявленная неисправность *', 'ars-service' ); ?></label>
-                <textarea id="reported_failure" name="reported_failure" required><?php echo isset( $order['reported_failure'] ) && $order['reported_failure'] ? $order['reported_failure'] : ''; ?></textarea>
+                <textarea id="reported_failure" name="reported_failure"
+                          required><?php echo isset( $order['reported_failure'] ) && $order['reported_failure'] ? $order['reported_failure'] : ''; ?></textarea>
             </div>
 
             <div class="ars_form_group">
                 <label for="comment"><?php _e( 'Комментарий', 'ars-service' ); ?></label>
-                <textarea id="comment" name="comment"><?php echo isset( $order['comment'] ) && $order['comment'] ? $order['comment'] : ''; ?></textarea>
+                <textarea id="comment"
+                          name="comment"><?php echo isset( $order['comment'] ) && $order['comment'] ? $order['comment'] : ''; ?></textarea>
             </div>
         </div>
 

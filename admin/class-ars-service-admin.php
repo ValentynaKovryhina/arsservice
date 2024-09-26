@@ -179,6 +179,11 @@ class Ars_Service_Admin {
 			'status'             => intval( $_POST['status'] ),
 		];
 
+		// add checkboxes
+		if ( isset( $_POST['checkboxes'] ) && is_array( $_POST['checkboxes'] ) && ! empty( $_POST['checkboxes'] ) ) {
+			$data['additional_info'] = serialize( $_POST['checkboxes'] );
+		}
+
 		// check id
 		if ( isset( $_POST['id'] ) && ! empty( $_POST['id'] ) ) {
 			$data['id']      = intval( $_POST['id'] );

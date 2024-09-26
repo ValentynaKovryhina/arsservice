@@ -32,13 +32,18 @@ jQuery(document).ready(function ($) {
             data.appearance_comment = form.find('#appearance_comment').val();
             data.complete_comment = form.find('#complete_comment').val();
 
+            //checkboxes
+            var checkboxes = [];
+            form.find('input[name="ars_checkboxes"]:checked').each(function () {
+                checkboxes.push($(this).val());
+            });
 
-
-
-
+            data.checkboxes = checkboxes;
 
             console.log('data');
             console.log(data);
+            console.log(checkboxes);
+
             // return;
 
             // Отправляем AJAX-запрос
