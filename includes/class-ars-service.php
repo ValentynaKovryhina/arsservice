@@ -157,6 +157,7 @@ class Ars_Service {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_plugin_page' );
+		$this->loader->add_action( 'wp_ajax_ars_service_create_order', $plugin_admin, 'create_update_order' );
 
 	}
 

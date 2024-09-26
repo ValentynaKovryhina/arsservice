@@ -13,13 +13,13 @@
             <h2 class="ars_form_group_heading"><?php _e( 'Информация о клиенте', 'ars-service' ); ?></h2>
 
             <div class="ars_form_group">
-                <label for="fio"><?php _e( 'ФИО', 'ars-service' ); ?></label>
-                <input type="text" id="fio" name="fio">
+                <label for="client_name"><?php _e( 'ФИО *', 'ars-service' ); ?></label>
+                <input type="text" id="client_name" name="client_name" required>
             </div>
 
             <div class="ars_form_group">
-                <label for="address"><?php _e( 'Адрес', 'ars-service' ); ?></label>
-                <input type="text" id="address" name="address">
+                <label for="address"><?php _e( 'Адрес *', 'ars-service' ); ?></label>
+                <input type="text" id="address" name="address" required>
             </div>
 
         </div>
@@ -27,13 +27,13 @@
         <div class="ars_form_block">
 
             <div class="ars_form_group">
-                <label for="phone"><?php _e( 'Телефон', 'ars-service' ); ?></label>
-                <input type="text" id="phone" name="phone">
+                <label for="phone"><?php _e( 'Телефон *', 'ars-service' ); ?></label>
+                <input type="text" id="phone" name="phone" required>
             </div>
 
             <div class="ars_form_group">
-                <label for="document"><?php _e( 'Документ', 'ars-service' ); ?></label>
-                <input type="text" id="document" name="document">
+                <label for="document"><?php _e( 'Документ *', 'ars-service' ); ?></label>
+                <input type="text" id="document" name="document" required>
             </div>
 
         </div>
@@ -44,26 +44,12 @@
 
             <div class="ars_form_group">
                 <label for="id"><?php _e( 'ID', 'ars-service' ); ?></label>
-                <input type="text" id="id" name="id" disabled>
+                <input type="text" id="id" name="id" readonly>
             </div>
 
             <div class="ars_form_group">
-                <label for="device"><?php _e( 'Устройство', 'ars-service' ); ?></label>
-                <input type="text" id="device" name="device">
-            </div>
-
-        </div>
-
-        <div class="ars_form_block">
-
-            <div class="ars_form_group">
-                <label for="creation_date"><?php _e( 'Дата создания', 'ars-service' ); ?></label>
-                <input type="text" id="creation_date" name="creation_date" disabled>
-            </div>
-
-            <div class="ars_form_group">
-                <label for="cost"><?php _e( 'Стоимость', 'ars-service' ); ?></label>
-                <input type="number" id="cost" name="cost">
+                <label for="device"><?php _e( 'Устройство *', 'ars-service' ); ?></label>
+                <input type="text" id="device" name="device" required>
             </div>
 
         </div>
@@ -71,13 +57,27 @@
         <div class="ars_form_block">
 
             <div class="ars_form_group">
-                <label for="sn"><?php _e( 'S/N', 'ars-service' ); ?></label>
-                <input type="text" id="sn" name="sn" disabled>
+                <label for="date"><?php _e( 'Дата создания', 'ars-service' ); ?></label>
+                <input type="text" id="date" name="date" readonly>
             </div>
 
             <div class="ars_form_group">
-                <label for="status"><?php _e( 'Статус', 'ars-service' ); ?></label>
-                <select id="status" name="status">
+                <label for="price"><?php _e( 'Стоимость', 'ars-service' ); ?></label>
+                <input type="number" id="price" name="price">
+            </div>
+
+        </div>
+
+        <div class="ars_form_block">
+
+            <div class="ars_form_group">
+                <label for="sn"><?php _e( 'S/N *', 'ars-service' ); ?></label>
+                <input type="text" id="sn" name="sn" required>
+            </div>
+
+            <div class="ars_form_group">
+                <label for="status"><?php _e( 'Статус *', 'ars-service' ); ?></label>
+                <select id="status" name="status" required>
                     <option value="0"></option>
                     <option value="1"><?php _e( 'Принят на сервис', 'ars-service' ); ?></option>
                     <option value="2"><?php _e( 'Ожидает детали', 'ars-service' ); ?></option>
@@ -190,8 +190,8 @@
 
         <div class="ars_form_block">
             <div class="ars_form_group">
-                <label for="issue"><?php _e( 'Заявленная неисправность', 'ars-service' ); ?></label>
-                <textarea id="issue" name="issue"></textarea>
+                <label for="reported_failure"><?php _e( 'Заявленная неисправность *', 'ars-service' ); ?></label>
+                <textarea id="reported_failure" name="reported_failure" required></textarea>
             </div>
 
             <div class="ars_form_group">
