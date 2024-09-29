@@ -7,7 +7,7 @@ jQuery(document).ready(function ($) {
     function createOrUpdateOrder() {
 
         // Обработчик события отправки формы
-        $('#ars_order_form').submit(function (e) {
+        $(document).on('submit', '#ars_order_form', function (e) {
             e.preventDefault(); // Предотвращаем стандартную отправку формы
 
             var form = $(this);
@@ -40,20 +40,22 @@ jQuery(document).ready(function ($) {
 
             data.checkboxes = checkboxes;
 
-            console.log('data');
-            console.log(data);
-            console.log(checkboxes);
-
-            // return;
-
-            // Отправляем AJAX-запрос
             $.ajax({
                 url: ars_service.ajax_url,
                 type: 'POST',
                 data: data,
                 success: function (response) {
-                    // Обрабатываем успешный ответ
-                    alert('Форма успешно отправлена: ' + response);
+                    // Success
+                    if (response.success) {
+
+                        if (response.data && response.data.form_html) {
+                            // Get HTML and replace form
+                            form.replaceWith(response.data.form_html);
+                        }
+
+                    }
+
+
                 },
                 error: function (xhr, status, error) {
                     // Обрабатываем ошибку
