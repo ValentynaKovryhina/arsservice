@@ -1,16 +1,15 @@
 jQuery(document).ready(function ($) {
 
-    console.log('ars-service-admin.js');
     createOrUpdateOrder();
 
 
     function createOrUpdateOrder() {
 
-        // Обработчик события отправки формы
         $(document).on('submit', '#ars_order_form', function (e) {
-            e.preventDefault(); // Предотвращаем стандартную отправку формы
+            e.preventDefault();
 
             var form = $(this);
+            var loader = form.find('.ars_loader_wrapper');
 
             var data = {
                 action: 'ars_service_create_order',
@@ -44,22 +43,25 @@ jQuery(document).ready(function ($) {
                 url: ars_service.ajax_url,
                 type: 'POST',
                 data: data,
+                beforeSend: function () {
+                    loader.css('display', 'flex');
+                },
                 success: function (response) {
+
                     // Success
                     if (response.success) {
-
                         if (response.data && response.data.form_html) {
                             // Get HTML and replace form
                             form.replaceWith(response.data.form_html);
                         }
-
+                    } else {
+                        alert(response.data.message);
                     }
-
+                    loader.hide();
 
                 },
                 error: function (xhr, status, error) {
-                    // Обрабатываем ошибку
-                    console.log('Произошла ошибка: ' + error);
+                    alert('Произошла ошибка. Пожалуйста, попробуйте позже.');
                 }
             });
         });

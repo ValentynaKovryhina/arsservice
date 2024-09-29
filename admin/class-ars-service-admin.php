@@ -198,7 +198,7 @@ class Ars_Service_Admin {
 		$insert = $wpdb->replace( $wpdb->prefix . 'ars_orders', $data );
 
 		if ( $insert === false ) {
-			wp_send_json_error( [ 'message' => 'Произошла ошибка. Пожалуйста, попробуйте позже.' ] );
+			wp_send_json_error( [ 'message' => 'Произошла ошибка #3. Пожалуйста, попробуйте позже.' ] );
 		}
 
 		if ( $insert === 0 ) {
@@ -564,6 +564,10 @@ class Ars_Service_Admin {
             <div class="ars_form_block ars_form_button_block">
                 <button type="reset" class="button button-secondary"><?php _e( 'Отменить', 'ars-service' ); ?></button>
                 <button type="submit" class="button button-primary"><?php _e( 'Сохранить', 'ars-service' ); ?></button>
+            </div>
+
+            <div class="ars_loader_wrapper">
+                <div class="ars_loader"></div>
             </div>
 
         </form>

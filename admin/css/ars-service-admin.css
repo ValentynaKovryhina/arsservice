@@ -53,6 +53,8 @@
 
 .ars_order_form {
     max-width: 800px;
+    position: relative;
+    padding: 20px;
 }
 
 .ars_form_block {
@@ -149,4 +151,40 @@
 .ars_form_block .ars_comment span {
     white-space: nowrap;
     font-size: 10px;
+}
+
+/*loader*/
+.ars_loader_wrapper {
+    /*display: flex;*/
+    display: none;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 999;
+}
+
+.ars_loader {
+    width: 50px;
+    padding: 8px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #2271b1;
+    --_m: conic-gradient(#0000 10%, #000),
+    linear-gradient(#000 0 0) content-box;
+    -webkit-mask: var(--_m);
+    mask: var(--_m);
+    -webkit-mask-composite: source-out;
+    mask-composite: subtract;
+    animation: ars_l3 1s infinite linear;
+}
+
+@keyframes ars_l3 {
+    to {
+        transform: rotate(1turn)
+    }
 }
