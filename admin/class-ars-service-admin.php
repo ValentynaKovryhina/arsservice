@@ -266,13 +266,6 @@ class Ars_Service_Admin {
 			$comments = [];
 		}
 
-		if ( isset( $order['date'] ) && $order['date'] ) {
-			$order_date          = new DateTime( $order['date'] );
-			$date = $order_date->format( 'd.m.Y H:i' );
-		} else {
-			$date = '';
-		}
-
 		ob_start(); ?>
 
         <form id='ars_order_form' class='ars_order_form'>
@@ -342,7 +335,7 @@ class Ars_Service_Admin {
                 <div class="ars_form_group">
                     <label for="date"><?php _e( 'Дата создания', 'ars-service' ); ?></label>
                     <input type="text" id="date" name="date"
-                           value="<?php echo $date; ?>"
+                           value="<?php echo isset( $order['date'] ) && $order['date'] ? $order['date'] : ''; ?>"
                            readonly>
                 </div>
 

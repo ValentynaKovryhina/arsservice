@@ -1,7 +1,7 @@
 jQuery(document).ready(function ($) {
 
     createOrUpdateOrder();
-
+    searchInOrderTable();
 
     function createOrUpdateOrder() {
 
@@ -67,6 +67,23 @@ jQuery(document).ready(function ($) {
         });
     }
 
+    function searchInOrderTable() {
+
+        $('#ars_search').on('input', function () {
+            var searchValue = $(this).val().toLowerCase();
+
+            $('#ars_orders_list tbody tr').each(function () {
+                var id = $(this).data('id').toString().toLowerCase();
+                var sn = $(this).data('sn').toString().toLowerCase();
+                var phone = $(this).data('phone').toString().toLowerCase();
+
+                if (id.startsWith(searchValue) || sn.startsWith(searchValue) || phone.startsWith(searchValue)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    }
 
 });
-
