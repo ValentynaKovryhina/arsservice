@@ -207,9 +207,9 @@ class Ars_Service_Admin {
 
 		$inserted_id = $wpdb->insert_id;
 
-        if (!$inserted_id) {
-            wp_send_json_error( [ 'message' => 'Произошла ошибка #1. Пожалуйста, попробуйте позже.' ] );
-        }
+		if ( ! $inserted_id ) {
+			wp_send_json_error( [ 'message' => 'Произошла ошибка #1. Пожалуйста, попробуйте позже.' ] );
+		}
 
 		// insert comment
 		if ( isset( $_POST['comment'] ) && ! empty( $_POST['comment'] ) ) {
@@ -220,11 +220,11 @@ class Ars_Service_Admin {
 			$wpdb->insert( $wpdb->prefix . 'ars_comments', $comment_data );
 		}
 
-        $form = $this->generate_form( $inserted_id );
+		$form = $this->generate_form( $inserted_id );
 
-        if (!$form ) {
-            wp_send_json_error( [ 'message' => 'Произошла ошибка #2. Пожалуйста, попробуйте позже.' ] );
-        }
+		if ( ! $form ) {
+			wp_send_json_error( [ 'message' => 'Произошла ошибка #2. Пожалуйста, попробуйте позже.' ] );
+		}
 
 		wp_send_json_success( [ 'message' => $success_message, 'form_html' => $form ] );
 	}
@@ -255,9 +255,29 @@ class Ars_Service_Admin {
 
 		}
 
+		if ( ! $order ) {
+			$order = [];
+			$title = __( 'Создать новый заказ', 'ars-service' );
+		} else {
+			$title = __( 'Редактировать заказ', 'ars-service' );
+		}
+
+		if ( ! $comments ) {
+			$comments = [];
+		}
+
+		if ( isset( $order['date'] ) && $order['date'] ) {
+			$order_date          = new DateTime( $order['date'] );
+			$date = $order_date->format( 'd.m.Y H:i' );
+		} else {
+			$date = '';
+		}
+
 		ob_start(); ?>
 
         <form id='ars_order_form' class='ars_order_form'>
+
+            <h1><?php echo $title; ?></h1>
 
             <div class="ars_form_block">
 
@@ -322,7 +342,7 @@ class Ars_Service_Admin {
                 <div class="ars_form_group">
                     <label for="date"><?php _e( 'Дата создания', 'ars-service' ); ?></label>
                     <input type="text" id="date" name="date"
-                           value="<?php echo isset( $order['date'] ) && $order['date'] ? $order['date'] : ''; ?>"
+                           value="<?php echo $date; ?>"
                            readonly>
                 </div>
 
