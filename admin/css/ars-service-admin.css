@@ -124,3 +124,29 @@
     line-height: 1;
     break-inside: avoid;
 }
+
+.ars_form_block #comment {
+    width: 100%;
+}
+
+.ars_form_block .ars_comment {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    box-shadow: 0 0 0 transparent;
+    border-radius: 4px;
+    border: 1px solid #8c8f94;
+    background-color: #dcdcde;
+    color: #2c3338;
+}
+
+.ars_form_block .ars_comment p {
+    margin: 0;
+    padding-right: 10px;
+}
+
+.ars_form_block .ars_comment span {
+    white-space: nowrap;
+    font-size: 10px;
+}

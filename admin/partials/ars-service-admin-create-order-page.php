@@ -23,18 +23,8 @@
 		}
 
 		// get comments
-		$comments = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}ars_comments WHERE order_id = %d", $id ), ARRAY_A );
+		$comments = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}ars_comments WHERE order_id = %d ORDER BY date DESC", $id ), ARRAY_A );
 
-		if ( $comments && is_array( $comments ) && ! empty( $comments ) ) {
-//            foreach ( $comments as $comment ) {
-//                echo '<p>' . $comment['comment'] . '</p>';
-//            }
-
-			echo '<pre>';
-			var_dump( '$comments' );
-			var_dump( $comments );
-			echo '</pre>';
-		}
 	}
 
 	?>
@@ -325,17 +315,20 @@
 
             <h4 class="ars_form_group_heading"><?php _e( 'Комментарии', 'ars-service' ); ?></h4>
 
-            <div class="ars_form_group">
+            <div class="ars_form_block">
                 <textarea id="comment"
-                          name="comment" placeholder="<?php _e( 'Написать комментарий...', 'ars-service' ); ?>"></textarea>
+                          name="comment"
+                          placeholder="<?php _e( 'Написать комментарий...', 'ars-service' ); ?>"></textarea>
             </div>
 
 			<?php foreach ( $comments as $comment ) :
-                $date = new DateTime($comment['date']);
-                $date_text = $date->format('d.m.Y H:i');?>
-                <div class="ars_form_group">
-                    <p><?php echo $comment['comment']; ?></p>
-                    <span><?php echo $date_text; ?></span>
+				$date = new DateTime( $comment['date'] );
+				$date_text = $date->format( 'd.m.Y H:i' ); ?>
+                <div class="ars_form_block">
+                    <div class="ars_comment">
+                        <p><?php echo $comment['comment']; ?></p>
+                        <span><?php echo $date_text; ?></span>
+                    </div>
                 </div>
 			<?php endforeach; ?>
 
