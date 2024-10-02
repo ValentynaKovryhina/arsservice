@@ -157,24 +157,19 @@ class Ars_Service_Admin {
 			wp_send_json_error( [ 'message' => 'Nonce error' ] );
 		}
 
-		// TODO Validation
-		// TODO check that S/N is unique
-		// TODO move data to separate function
-
 		global $wpdb;
 
 		$data = [
-			'sn'                 => sanitize_text_field( $_POST['sn'] ),
-			'client_name'        => sanitize_text_field( $_POST['client_name'] ),
-			'address'            => sanitize_text_field( $_POST['address'] ),
-			'phone'              => sanitize_text_field( $_POST['phone'] ),
-			'document'           => sanitize_text_field( $_POST['document'] ),
-			'reported_failure'   => sanitize_text_field( $_POST['reported_failure'] ),
-			'complete_comment'   => sanitize_text_field( $_POST['complete_comment'] ),
-			'appearance_comment' => sanitize_text_field( $_POST['appearance_comment'] ),
-			'device'             => sanitize_text_field( $_POST['device'] ),
-			'price'              => intval( $_POST['price'] ),
-			'status'             => intval( $_POST['status'] ),
+			'client_name'        => isset( $_POST['client_name'] ) ? $this->validate_text_field( $_POST['client_name'], 250, '"ФИО"' ) : '',
+			'address'            => isset( $_POST['address'] ) ? $this->validate_text_field( $_POST['address'], 250, '"Адрес"' ) : '',
+			'phone'              => isset( $_POST['phone'] ) ? $this->validate_text_field( $_POST['phone'], 25, '"Телефон"' ) : '',
+			'document'           => isset( $_POST['document'] ) ? $this->validate_text_field( $_POST['document'], 250, '"Документ"' ) : '',
+			'reported_failure'   => isset( $_POST['reported_failure'] ) ? $this->validate_text_field( $_POST['reported_failure'], 500, '"Заявленная неисправность"' ) : '',
+			'complete_comment'   => isset( $_POST['complete_comment'] ) ? $this->validate_text_field( $_POST['complete_comment'], 500, '"Комплектность Другое"', true ) : '',
+			'appearance_comment' => isset( $_POST['appearance_comment'] ) ? $this->validate_text_field( $_POST['appearance_comment'], 500, '"Внешний вид Другое"', true ) : '',
+			'device'             => isset( $_POST['device'] ) ? $this->validate_text_field( $_POST['device'], 500, '"Устройство"' ) : '',
+			'price'              => isset( $_POST['price'] ) ? $this->validate_price( $_POST['price'] ) : '',
+			'status'             => isset( $_POST['status'] ) ? $this->validate_status( $_POST['status'] ) : '',
 		];
 
 		// add checkboxes
@@ -185,8 +180,10 @@ class Ars_Service_Admin {
 		// check id
 		if ( isset( $_POST['id'] ) && ! empty( $_POST['id'] ) ) {
 			$data['id']      = intval( $_POST['id'] );
+			$data['sn']      = isset( $_POST['sn'] ) ? $this->validate_sn( $_POST['sn'], $_POST['id'] ) : '';
 			$success_message = 'Запись обновлена успешно';
 		} else {
+			$data['sn']      = isset( $_POST['sn'] ) ? $this->validate_sn( $_POST['sn'] ) : '';
 			$success_message = 'Запись создана успешно';
 		}
 
@@ -215,7 +212,7 @@ class Ars_Service_Admin {
 		if ( isset( $_POST['comment'] ) && ! empty( $_POST['comment'] ) ) {
 			$comment_data = [
 				'order_id' => $inserted_id,
-				'comment'  => sanitize_text_field( $_POST['comment'] ),
+				'comment'  => isset( $_POST['comment'] ) ? $this->validate_text_field( $_POST['comment'], 500, '"Комментарий"', true ) : '',
 			];
 			$wpdb->insert( $wpdb->prefix . 'ars_comments', $comment_data );
 		}
@@ -227,6 +224,93 @@ class Ars_Service_Admin {
 		}
 
 		wp_send_json_success( [ 'message' => $success_message, 'form_html' => $form ] );
+	}
+
+	private function validate_text_field( $text = null, $length = 0, $error_message_field = null, $length_only = false ) {
+
+		if ( ! $length_only && empty( $text ) ) {
+			wp_send_json_error( [ 'message' => 'Поле ' . $error_message_field . ' не заполнено.' ] );
+		}
+
+		if ( $length && mb_strlen( $text ) > $length ) {
+			wp_send_json_error( [ 'message' => 'Длина поля превышает допустимое значение. Поле ' . $error_message_field . ' не может быть длиннее ' . $length . ' символов.' ] );
+		}
+
+		return sanitize_text_field( $text );
+	}
+
+	private function validate_status( $status = 0 ) {
+
+		if ( ! $status || $status < 1 || $status > 4 ) {
+			wp_send_json_error( [ 'message' => 'Выберете статус' ] );
+		}
+
+		return intval( $status );
+	}
+
+	private function validate_price( $price = 0 ) {
+
+		if ( $price && strlen( (string) $price ) > 6 ) {
+			wp_send_json_error( [ 'message' => 'Цена не может быть более 5 символов' ] );
+		}
+
+		return intval( $price );
+	}
+
+	private function validate_sn( $sn = null, $id = null ) {
+
+		global $wpdb;
+
+		if ( empty( $sn ) ) {
+			wp_send_json_error( [ 'message' => 'Поле SN должно присутствовать' ] );
+		}
+
+		if ( strlen( $sn ) > 50 ) {
+			wp_send_json_error( [ 'message' => 'Поле SN не может быть длиннее 50 символов' ] );
+		}
+
+		$sql = "SELECT id FROM {$wpdb->prefix}ars_orders WHERE sn = %s AND id != %d LIMIT 1";
+
+		$query = $wpdb->prepare( $sql, $sn, $id ? intval( $id ) : 0 );
+
+		$existing_sn = $wpdb->get_var( $query );
+
+		if ( $existing_sn ) {
+			wp_send_json_error( [ 'message' => 'Поле SN должно быть уникальным' ] );
+		}
+
+		return sanitize_text_field( $sn );
+	}
+
+	public function delete_order() {
+
+		if ( empty( $_POST ) ) {
+			wp_send_json_error( [ 'message' => 'Empty POST' ] );
+		}
+
+		// check nonce
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'ars_service_nonce' ) ) {
+			wp_send_json_error( [ 'message' => 'Nonce error' ] );
+		}
+
+		$id = intval( $_POST['service_id'] );
+
+		if ( ! $id ) {
+			wp_send_json_error( [ 'message' => 'ID is empty' ] );
+		}
+
+		// delete record from orders
+		// delete record from comments
+		global $wpdb;
+		$delete_order    = $wpdb->delete( $wpdb->prefix . 'ars_orders', [ 'id' => $id ] );
+		$delete_comments = $wpdb->delete( $wpdb->prefix . 'ars_comments', [ 'order_id' => $id ] );
+
+		if ( $delete_order === false || $delete_comments === false ) {
+			wp_send_json_error( [ 'message' => 'Произошла ошибка #4. Пожалуйста, попробуйте позже.' ] );
+		}
+
+		wp_send_json_success( [ 'message' => 'Запись удалена успешно' ] );
+
 	}
 
 	public function generate_form( $order_id = null ) {
@@ -342,7 +426,8 @@ class Ars_Service_Admin {
                 <div class="ars_form_group">
                     <label for="price"><?php _e( 'Стоимость', 'ars-service' ); ?></label>
                     <input type="number" id="price" name="price"
-                           value="<?php echo isset( $order['price'] ) && $order['price'] ? $order['price'] : ''; ?>">
+                           value="<?php echo isset( $order['price'] ) && $order['price'] ? $order['price'] : ''; ?>"
+                           min="0">
                 </div>
 
             </div>

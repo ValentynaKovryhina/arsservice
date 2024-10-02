@@ -66,7 +66,11 @@
                         </a>
                     </td>
 
-                    <td><span class="dashicons dashicons-trash"></span></td>
+                    <td>
+                        <a href="#" class="ars_delete_item" data-delete-id="<?php echo $service['id']; ?>">
+                            <span class="dashicons dashicons-trash"></span>
+                        </a>
+                    </td>
 
                 </tr>
 			<?php endforeach; ?>
@@ -80,4 +84,30 @@
 
 	<?php endif; ?>
 
+
+    <div id="ars_popup_delete_confirmation" class="ars_popup_delete_confirmation">
+
+        <div class="ars_popup_content_wrapper">
+            <div class="ars_popup_content">
+				<?php _e( 'Вы действительно хотите удалить данные о заказе id: ', 'ars-service' );
+				echo '<span id="ars_popup_id"></span>?'; ?>
+
+                <div class="ars_popup_buttons">
+                    <button id="ars_popup_cancel"
+                            class="button button-secondary"><?php _e( 'Отмена', 'ars-service' ); ?></button>
+                    <button id="ars_popup_delete"
+                            class="button button-primary"><?php _e( 'Удалить', 'ars-service' ); ?></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="ars_loader_wrapper">
+            <div class="ars_loader"></div>
+        </div>
+
+    </div>
+
+
 </div>
+
+

@@ -2,6 +2,7 @@ jQuery(document).ready(function ($) {
 
     createOrUpdateOrder();
     searchInOrderTable();
+    deleteOrder();
 
     function createOrUpdateOrder() {
 
@@ -84,6 +85,72 @@ jQuery(document).ready(function ($) {
                 }
             });
         });
+    }
+
+    function deleteOrder() {
+
+        $('.ars_delete_item').off('click').on('click', function (e) {
+            e.preventDefault(); // Отменяем стандартное действие ссылки
+
+            var deleteId = $(this).data('delete-id');
+            var popup = $('#ars_popup_delete_confirmation');
+
+            $('#ars_popup_id').text(deleteId);
+
+            popup.fadeIn();
+
+            $('#ars_popup_delete').off('click').on('click', function (e) {
+                e.preventDefault();
+
+                var loader = popup.find('.ars_loader_wrapper');
+
+                var data = {
+                    action: 'ars_delete_order',
+                    nonce: ars_service.nonce,
+                    service_id: deleteId
+                };
+
+                // AJAX запрос для удаления элемента
+                $.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: data,
+                    beforeSend: function () {
+                        loader.css('display', 'flex');
+                    },
+                    success: function (response) {
+
+                        if (response.success) {
+                            popup.fadeOut();
+                            $('tr[data-id="' + deleteId + '"]').remove();
+                            loader.hide();
+                        } else if( response.data && response.data.message) {
+                            alert(response.data.message);
+                            loader.hide();
+                        } else {
+                            alert('Ошибка при удалении. Попробуйте еще раз.');
+                            loader.hide();
+                        }
+                    },
+                    error: function (response) {
+                        alert('Ошибка при удалении. Попробуйте еще раз.');
+                        loader.hide();
+                    }
+                });
+            });
+
+
+        });
+
+        // Закрытие popup при клике на кнопку "Отмена"
+        $('#ars_popup_cancel').on('click', function (e) {
+            e.preventDefault();
+
+            // Скрываем popup
+            $('#ars_popup_delete_confirmation').fadeOut();
+        });
+
+
     }
 
 });
