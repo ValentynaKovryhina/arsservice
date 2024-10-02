@@ -104,6 +104,7 @@
 .ars_form_group textarea,
 .ars_form_group:not(.ars_form_checkboxes_group) input {
     width: 100%;
+    min-width: 100%;
     display: block;
 }
 
@@ -223,6 +224,11 @@
     margin-right: 10px;
 }
 
+.ars_table_wrapper {
+    max-width: 100%;
+    overflow-x: scroll;
+}
+
 /*loader*/
 .ars_loader_wrapper {
     /*display: flex;*/
@@ -257,4 +263,24 @@
     to {
         transform: rotate(1turn)
     }
+}
+
+@media (max-width: 782px) {
+    .ars_form_group {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .ars_form_block {
+        margin-top: 0;
+    }
+
+    .ars_form_button_block {
+        margin-top: 20px;
+    }
+
+    .ars_form_block .ars_comment {
+        margin-top: 10px;
+    }
+
 }
