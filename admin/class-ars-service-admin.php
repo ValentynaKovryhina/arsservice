@@ -132,17 +132,6 @@ class Ars_Service_Admin {
 			}
 		);
 
-		add_submenu_page(
-			'ars-service-info',
-			__( 'Logs', 'ars-service' ),
-			__( 'Logs', 'ars-service' ),
-			'manage_options',
-			'ars-service-logs',
-			function () {
-				include 'partials/ars-service-admin-logs-page.php';
-			}
-		);
-
 	}
 
 	public function create_update_order() {
