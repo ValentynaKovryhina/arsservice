@@ -686,7 +686,7 @@ class Ars_Service_Admin {
                     <div class="ars_form_block">
                         <div class="ars_comment">
                             <p><?php echo $comment['comment']; ?></p>
-                            <span><?php echo $date_text; ?></span>
+                            <i><?php echo $date_text; ?></i>
                         </div>
                     </div>
 				<?php endforeach; ?>

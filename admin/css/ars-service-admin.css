@@ -6,12 +6,51 @@
 :root {
     --primary-color: #1d2327;
     --secondary-color: #fff;
+    --tertiary-color: #dcdcde;
+    --primary-text-color: #1d2327;
+    --secondary-text-color: #8c8f94;
+
 }
 
 .ars_container {
     width: 100%;
     margin-right: auto;
     margin-left: auto;
+}
+
+.ars_container,
+.ars_container h1,
+.ars_container h2,
+.ars_container h3,
+.ars_container h4,
+.ars_container h5,
+.ars_container h6,
+.ars_container p,
+.ars_container a,
+.ars_container span,
+.ars_container strong,
+.ars_container i {
+    color: var(--primary-text-color);
+}
+
+.ars_container span.dashicons {
+    color: var(--primary-color);
+}
+
+.ars_container input[type="text"],
+.ars_container input[type="email"],
+.ars_container input[type="password"],
+.ars_container textarea,
+.ars_container select,
+.ars_container select:focus {
+    color: var(--secondary-text-color);
+}
+
+.ars_container input[type="text"]::placeholder,
+.ars_container input[type="email"]::placeholder,
+.ars_container input[type="password"]::placeholder,
+.ars_container textarea::placeholder {
+    color: var(--secondary-text-color);
 }
 
 /* Extra small devices (portrait phones, less than 576px) */
@@ -54,6 +93,27 @@
     .ars_container {
         max-width: 1320px;
     }
+}
+
+#ars_order_form input,
+.ars_search_wrapper input,
+#ars_order_form textarea,
+#ars_order_form select,
+#ars_order_form label,
+#ars_order_form input[type="checkbox"],
+#ars_order_form input[type="radio"] {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+#ars_order_form input:focus,
+.ars_search_wrapper input:focus,
+#ars_order_form textarea:focus,
+#ars_order_form select:focus,
+#ars_order_form input[type="checkbox"]:focus,
+#ars_order_form input[type="radio"]:focus {
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 .ars_order_form {
@@ -113,6 +173,66 @@
     display: block;
 }
 
+.ars_form_group select,
+.ars_form_group textarea,
+.ars_form_block textarea,
+.ars_form_group:not(.ars_form_checkboxes_group) input,
+.ars_search_wrapper input {
+    border-radius: 0;
+    border: 1px solid var(--primary-color);
+}
+
+#ars_order_form .ars_form_group:not(.ars_form_checkboxes_group) input:focus,
+.ars_search_wrapper input:focus,
+#ars_order_form textarea:focus,
+#ars_order_form select:focus {
+    box-shadow: 0 0 0 1px var(--primary-color) !important;
+    border: 1px solid var(--primary-color);
+}
+
+.ars_form_group label {
+    padding-left: 5px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/*checkboxes style*/
+.ars_form_checkboxes_block input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    position: relative;
+    min-width: 18px;
+    min-height: 18px;
+    border: 1px solid var(--primary-color);
+    border-radius: 0;
+    margin-right: 10px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s;
+}
+
+.ars_form_checkboxes_block input[type="checkbox"]:hover {
+    opacity: 0.7;
+}
+
+.ars_form_checkboxes_block input[type="checkbox"]:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.ars_form_checkboxes_block input[type="checkbox"]:checked::before {
+    content: '\2713';
+    font-size: 16px;
+    line-height: 1;
+    color: var(--secondary-color);
+    position: absolute;
+    left: 2px;
+    bottom: -4px;
+}
+
+/*checkboxes style end*/
+
 .ars_form_group label input {
     margin-top: 1px;
     margin-right: 8px;
@@ -147,10 +267,9 @@
     justify-content: space-between;
     padding: 10px;
     box-shadow: 0 0 0 transparent;
-    border: 1px solid #8c8f94;
-    background-color: #dcdcde;
-    color: #2c3338;
-    border-radius: 4px;
+    border: 1px solid var(--primary-color);
+    background-color: var(--tertiary-color);
+    color: var(--primary-color);
 }
 
 .ars_form_block .ars_comment p {
@@ -158,9 +277,9 @@
     padding-right: 10px;
 }
 
-.ars_form_block .ars_comment span {
+.ars_form_block .ars_comment i {
     white-space: nowrap;
-    font-size: 10px;
+    font-size: 9px;
 }
 
 #ars_orders_list {
@@ -236,6 +355,61 @@
 .ars_table_wrapper {
     max-width: 100%;
     overflow-x: scroll;
+}
+
+.ars_manage_orders .button-primary,
+.wp-core-ui #ars_order_form .button-primary,
+.wp-core-ui #ars_order_form .button-secondary {
+    padding: 0 40px 3px;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    min-height: 40px;
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 600;
+}
+
+.ars_manage_orders .button-primary:hover,
+.wp-core-ui #ars_order_form .button-primary:hover,
+.wp-core-ui #ars_order_form .button-secondary:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    opacity: 0.7;
+}
+
+.ars_manage_orders .button-primary,
+.wp-core-ui #ars_order_form .button-primary {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--secondary-color);
+}
+
+.wp-core-ui #ars_order_form .button-secondary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    background: var(--secondary-color);
+}
+
+.ars_container table.widefat {
+    border: 1px solid var(--primary-color);
+}
+
+.ars_container .widefat thead th {
+    border-bottom: 1px solid var(--primary-color);
+}
+
+.ars_container .widefat thead {
+    background: var(--primary-color);
+}
+
+.ars_container .widefat thead th {
+    color: var(--secondary-color);
+    font-weight: 600;
+    line-height: 1;
+    padding: 14px 10px;
 }
 
 /*loader*/
