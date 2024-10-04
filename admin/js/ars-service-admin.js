@@ -56,6 +56,10 @@ jQuery(document).ready(function ($) {
                             form.replaceWith(response.data.form_html);
                         }
                     } else {
+                        // highlight errors
+                        if (response.data && response.data.field) {
+                            form.find('#' + response.data.field).addClass('ars_error');
+                        }
                         alert(response.data.message);
                     }
                     loader.hide();
@@ -117,14 +121,15 @@ jQuery(document).ready(function ($) {
                     data: data,
                     beforeSend: function () {
                         loader.css('display', 'flex');
+                        popup.hide();
                     },
                     success: function (response) {
 
                         if (response.success) {
-                            popup.fadeOut();
+                            popup.hide();
                             $('tr[data-id="' + deleteId + '"]').remove();
                             loader.hide();
-                        } else if( response.data && response.data.message) {
+                        } else if (response.data && response.data.message) {
                             alert(response.data.message);
                             loader.hide();
                         } else {

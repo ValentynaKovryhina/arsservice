@@ -53,6 +53,11 @@
     color: var(--secondary-text-color);
 }
 
+#ars_order_form .ars_error:focus,
+#ars_order_form .ars_error {
+    box-shadow: 0 0 0 1px red !important;
+}
+
 /* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
     .ars_container {
@@ -359,7 +364,9 @@
 
 .ars_manage_orders .button-primary,
 .wp-core-ui #ars_order_form .button-primary,
-.wp-core-ui #ars_order_form .button-secondary {
+.wp-core-ui #ars_order_form .button-secondary,
+.ars_popup_buttons .button-primary,
+.ars_popup_buttons .button-secondary {
     padding: 0 40px 3px;
     border-radius: 0;
     display: flex;
@@ -372,22 +379,34 @@
     font-weight: 600;
 }
 
+.ars_popup_buttons .button-primary,
+.ars_popup_buttons .button-secondary {
+    padding: 0 30px 3px;
+    min-height: 30px;
+    display: inline-flex;
+    font-size: 12px;
+}
+
 .ars_manage_orders .button-primary:hover,
 .wp-core-ui #ars_order_form .button-primary:hover,
-.wp-core-ui #ars_order_form .button-secondary:hover {
+.wp-core-ui #ars_order_form .button-secondary:hover,
+.ars_popup_buttons .button-primary:hover,
+.ars_popup_buttons .button-secondary:hover {
     background: var(--primary-color);
     border-color: var(--primary-color);
     opacity: 0.7;
 }
 
 .ars_manage_orders .button-primary,
-.wp-core-ui #ars_order_form .button-primary {
+.wp-core-ui #ars_order_form .button-primary,
+.ars_popup_buttons .button-primary {
     background: var(--primary-color);
     border-color: var(--primary-color);
     color: var(--secondary-color);
 }
 
-.wp-core-ui #ars_order_form .button-secondary {
+.wp-core-ui #ars_order_form .button-secondary,
+.ars_popup_buttons .button-secondary {
     color: var(--primary-color);
     border-color: var(--primary-color);
     background: var(--secondary-color);

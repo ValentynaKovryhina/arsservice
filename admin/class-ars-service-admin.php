@@ -165,14 +165,14 @@ class Ars_Service_Admin {
 		];
 
 		$data = [
-			'client_name'        => isset( $_POST['client_name'] ) ? $this->validate_text_field( $_POST['client_name'], 250, '"ФИО"' ) : '',
-			'address'            => isset( $_POST['address'] ) ? $this->validate_text_field( $_POST['address'], 250, '"Адрес"' ) : '',
-			'phone'              => isset( $_POST['phone'] ) ? $this->validate_text_field( $_POST['phone'], 25, '"Телефон"' ) : '',
-			'document'           => isset( $_POST['document'] ) ? $this->validate_text_field( $_POST['document'], 250, '"Документ"' ) : '',
-			'reported_failure'   => isset( $_POST['reported_failure'] ) ? $this->validate_text_field( $_POST['reported_failure'], 500, '"Заявленная неисправность"' ) : '',
-			'complete_comment'   => isset( $_POST['complete_comment'] ) ? $this->validate_text_field( $_POST['complete_comment'], 500, '"Комплектность Другое"', true ) : '',
-			'appearance_comment' => isset( $_POST['appearance_comment'] ) ? $this->validate_text_field( $_POST['appearance_comment'], 500, '"Внешний вид Другое"', true ) : '',
-			'device'             => isset( $_POST['device'] ) ? $this->validate_text_field( $_POST['device'], 500, '"Устройство"' ) : '',
+			'client_name'        => isset( $_POST['client_name'] ) ? $this->validate_text_field( $_POST['client_name'], 250, '"ФИО"', false, 'client_name' ) : '',
+			'address'            => isset( $_POST['address'] ) ? $this->validate_text_field( $_POST['address'], 250, '"Адрес"', false, 'address' ) : '',
+			'phone'              => isset( $_POST['phone'] ) ? $this->validate_text_field( $_POST['phone'], 25, '"Телефон"', false, 'phone' ) : '',
+			'document'           => isset( $_POST['document'] ) ? $this->validate_text_field( $_POST['document'], 250, '"Документ"', false, 'document' ) : '',
+			'reported_failure'   => isset( $_POST['reported_failure'] ) ? $this->validate_text_field( $_POST['reported_failure'], 500, '"Заявленная неисправность"', false, 'reported_failure' ) : '',
+			'complete_comment'   => isset( $_POST['complete_comment'] ) ? $this->validate_text_field( $_POST['complete_comment'], 500, '"Комплектность Другое"', true, 'complete_comment' ) : '',
+			'appearance_comment' => isset( $_POST['appearance_comment'] ) ? $this->validate_text_field( $_POST['appearance_comment'], 500, '"Внешний вид Другое"', true, 'appearance_comment' ) : '',
+			'device'             => isset( $_POST['device'] ) ? $this->validate_text_field( $_POST['device'], 500, '"Устройство"', false, 'device' ) : '',
 			'price'              => isset( $_POST['price'] ) ? $this->validate_price( $_POST['price'] ) : '',
 			'status'             => isset( $_POST['status'] ) ? $this->validate_status( $_POST['status'] ) : '',
 		];
@@ -202,7 +202,7 @@ class Ars_Service_Admin {
 
 		if ( isset( $_POST['date'] ) && ! empty( $_POST['date'] ) ) {
 			$data['date'] = $_POST['date'];
-            $format[]    = '%s'; // date
+			$format[]     = '%s'; // date
 		}
 
 		$insert = $wpdb->replace( $wpdb->prefix . 'ars_orders', $data, $format );
@@ -228,7 +228,7 @@ class Ars_Service_Admin {
 		if ( isset( $_POST['comment'] ) && ! empty( $_POST['comment'] ) ) {
 			$comment_data = [
 				'order_id' => $inserted_id,
-				'comment'  => isset( $_POST['comment'] ) ? $this->validate_text_field( $_POST['comment'], 500, '"Комментарий"', true ) : '',
+				'comment'  => isset( $_POST['comment'] ) ? $this->validate_text_field( $_POST['comment'], 500, '"Комментарий"', true, 'comment' ) : '',
 			];
 			$wpdb->insert( $wpdb->prefix . 'ars_comments', $comment_data );
 		}
@@ -244,14 +244,14 @@ class Ars_Service_Admin {
 		wp_send_json_success( [ 'message' => $success_message, 'form_html' => $form ] );
 	}
 
-	private function validate_text_field( $text = null, $length = 0, $error_message_field = null, $length_only = false ) {
+	private function validate_text_field( $text = null, $length = 0, $error_message_field = null, $length_only = false, $field = null ) {
 
 		if ( ! $length_only && empty( $text ) ) {
-			wp_send_json_error( [ 'message' => 'Поле ' . $error_message_field . ' не заполнено.' ] );
+			wp_send_json_error( [ 'message' => 'Поле ' . $error_message_field . ' не заполнено.', 'field' => $field ] );
 		}
 
 		if ( $length && mb_strlen( $text ) > $length ) {
-			wp_send_json_error( [ 'message' => 'Длина поля превышает допустимое значение. Поле ' . $error_message_field . ' не может быть длиннее ' . $length . ' символов.' ] );
+			wp_send_json_error( [ 'message' => 'Длина поля превышает допустимое значение. Поле ' . $error_message_field . ' не может быть длиннее ' . $length . ' символов.', 'field' => $field ] );
 		}
 
 		return sanitize_text_field( $text );
@@ -260,7 +260,7 @@ class Ars_Service_Admin {
 	private function validate_status( $status = 0 ) {
 
 		if ( ! $status || $status < 1 || $status > 4 ) {
-			wp_send_json_error( [ 'message' => 'Выберете статус' ] );
+			wp_send_json_error( [ 'message' => 'Выберете статус', 'field' => 'status' ] );
 		}
 
 		return intval( $status );
@@ -269,7 +269,7 @@ class Ars_Service_Admin {
 	private function validate_price( $price = 0 ) {
 
 		if ( $price && strlen( (string) $price ) > 6 ) {
-			wp_send_json_error( [ 'message' => 'Цена не может быть более 5 символов' ] );
+			wp_send_json_error( [ 'message' => 'Цена не может быть более 5 символов', 'field' => 'price' ] );
 		}
 
 		return intval( $price );
@@ -279,12 +279,14 @@ class Ars_Service_Admin {
 
 		global $wpdb;
 
+		$field = 'sn';
+
 		if ( empty( $sn ) ) {
-			wp_send_json_error( [ 'message' => 'Поле SN должно присутствовать' ] );
+			wp_send_json_error( [ 'message' => 'Поле SN должно присутствовать', 'field' => $field ] );
 		}
 
 		if ( strlen( $sn ) > 50 ) {
-			wp_send_json_error( [ 'message' => 'Поле SN не может быть длиннее 50 символов' ] );
+			wp_send_json_error( [ 'message' => 'Поле SN не может быть длиннее 50 символов', 'field' => $field ] );
 		}
 
 		$sql = "SELECT id FROM {$wpdb->prefix}ars_orders WHERE sn = %s AND id != %d LIMIT 1";
@@ -294,7 +296,7 @@ class Ars_Service_Admin {
 		$existing_sn = $wpdb->get_var( $query );
 
 		if ( $existing_sn ) {
-			wp_send_json_error( [ 'message' => 'Поле SN должно быть уникальным' ] );
+			wp_send_json_error( [ 'message' => 'Поле SN должно быть уникальным', 'field' => $field ] );
 		}
 
 		return sanitize_text_field( $sn );
@@ -308,30 +310,30 @@ class Ars_Service_Admin {
 
 		// check nonce
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'ars_service_nonce' ) ) {
-            Logger::error( 'Nonce error' );
+			Logger::error( 'Nonce error' );
 			wp_send_json_error( [ 'message' => 'Nonce error' ] );
 		}
 
 		$id = intval( $_POST['service_id'] );
 
 		if ( ! $id ) {
-            Logger::error( 'ID is empty' );
+			Logger::error( 'ID is empty' );
 			wp_send_json_error( [ 'message' => 'ID is empty' ] );
 		}
 
 		// delete record from orders
 		// delete record from comments
 		global $wpdb;
-		$delete_order    = $wpdb->delete( $wpdb->prefix . 'ars_orders', [ 'id' => $id ] );
-        if ( $wpdb->last_error ) {
-            Logger::error( 'Error while deleting order from database: ' . $wpdb->last_error );
-        }
+		$delete_order = $wpdb->delete( $wpdb->prefix . 'ars_orders', [ 'id' => $id ] );
+		if ( $wpdb->last_error ) {
+			Logger::error( 'Error while deleting order from database: ' . $wpdb->last_error );
+		}
 		$delete_comments = $wpdb->delete( $wpdb->prefix . 'ars_comments', [ 'order_id' => $id ] );
-        if ( $wpdb->last_error ) {
-            Logger::error( 'Error while deleting comments from database: ' . $wpdb->last_error );
-        }
+		if ( $wpdb->last_error ) {
+			Logger::error( 'Error while deleting comments from database: ' . $wpdb->last_error );
+		}
 		if ( $delete_order === false || $delete_comments === false ) {
-            Logger::error( 'Error while deleting data' );
+			Logger::error( 'Error while deleting data' );
 			wp_send_json_error( [ 'message' => 'Произошла ошибка #4. Пожалуйста, попробуйте позже.' ] );
 		}
 
@@ -355,9 +357,9 @@ class Ars_Service_Admin {
 			// get data from database
 			$order = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}ars_orders WHERE id = %d", $id ), ARRAY_A );
 
-            if ( $wpdb->last_error ) {
-                Logger::error( 'Error while getting data from database: ' . $wpdb->last_error );
-            }
+			if ( $wpdb->last_error ) {
+				Logger::error( 'Error while getting data from database: ' . $wpdb->last_error );
+			}
 
 			if ( $order && is_array( $order ) && ! empty( $order ) ) {
 				$additional_info = unserialize( $order['additional_info'] );
@@ -367,9 +369,9 @@ class Ars_Service_Admin {
 			// get comments
 			$comments = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}ars_comments WHERE order_id = %d ORDER BY date DESC", $id ), ARRAY_A );
 
-            if ( $wpdb->last_error ) {
-                Logger::error( 'Error while getting comments from database: ' . $wpdb->last_error );
-            }
+			if ( $wpdb->last_error ) {
+				Logger::error( 'Error while getting comments from database: ' . $wpdb->last_error );
+			}
 
 		}
 
