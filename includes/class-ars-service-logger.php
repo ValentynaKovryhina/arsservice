@@ -303,6 +303,9 @@ class Ars_Service_Logger
 			self::$write_log = true;
 			self::$log_level = 'debug';
 
+			/* Удаляем старые файлы старше 3 месяцев */
+			self::delete_old_logs(self::$log_dir);
+
 			/* Print to screen */
 			if (true === self::$print_log) {
 				self::$output_streams['stdout'] = STDOUT;
@@ -328,6 +331,28 @@ class Ars_Service_Logger
 		/* Now that we have assigned the output stream, this function does not need
 		to be called anymore */
 		self::$logger_ready = true;
+	}
+
+	public static function delete_old_logs($directory)
+	{
+		$files = scandir($directory);
+		$current_time = time();
+		$three_months_ago = strtotime('-3 months');
+
+		foreach ($files as $file) {
+			$file_path = $directory . DIRECTORY_SEPARATOR . $file;
+
+			// Проверяем, что это файл, а не директория
+			if (is_file($file_path)) {
+				// Получаем время изменения файла
+				$file_modification_time = filemtime($file_path);
+
+				// Если файл старше 3 месяцев, удаляем его
+				if ($file_modification_time < $three_months_ago) {
+					unlink($file_path);
+				}
+			}
+		}
 	}
 
 
