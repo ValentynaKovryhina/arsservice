@@ -20,6 +20,9 @@
  * @subpackage Ars_Service/admin
  * @author     Imaris <info@imaris.ua>
  */
+
+use Ars_Service_Logger as Logger;
+
 class Ars_Service_Admin {
 
 	/**
@@ -148,6 +151,19 @@ class Ars_Service_Admin {
 
 		global $wpdb;
 
+		$format = [
+			'%s', // client_name
+			'%s', // address
+			'%s', // phone
+			'%s', // document
+			'%s', // reported_failure
+			'%s', // complete_comment
+			'%s', // appearance_comment
+			'%s', // device
+			'%d', // price
+			'%d', // status
+		];
+
 		$data = [
 			'client_name'        => isset( $_POST['client_name'] ) ? $this->validate_text_field( $_POST['client_name'], 250, '"ФИО"' ) : '',
 			'address'            => isset( $_POST['address'] ) ? $this->validate_text_field( $_POST['address'], 250, '"Адрес"' ) : '',
@@ -164,36 +180,47 @@ class Ars_Service_Admin {
 		// add checkboxes
 		if ( isset( $_POST['checkboxes'] ) && is_array( $_POST['checkboxes'] ) && ! empty( $_POST['checkboxes'] ) ) {
 			$data['additional_info'] = serialize( $_POST['checkboxes'] );
+			$format[]                = '%s'; // additional_info
 		}
 
 		// check id
 		if ( isset( $_POST['id'] ) && ! empty( $_POST['id'] ) ) {
-			$data['id']      = intval( $_POST['id'] );
-			$data['sn']      = isset( $_POST['sn'] ) ? $this->validate_sn( $_POST['sn'], $_POST['id'] ) : '';
+			$data['id'] = intval( $_POST['id'] );
+			$data['sn'] = isset( $_POST['sn'] ) ? $this->validate_sn( $_POST['sn'], $_POST['id'] ) : '';
+
+			$format[] = '%d'; // id
+			$format[] = '%s'; // sn
+
 			$success_message = 'Запись обновлена успешно';
 		} else {
-			$data['sn']      = isset( $_POST['sn'] ) ? $this->validate_sn( $_POST['sn'] ) : '';
+			$data['sn'] = isset( $_POST['sn'] ) ? $this->validate_sn( $_POST['sn'] ) : '';
+
+			$format[] = '%s'; // sn
+
 			$success_message = 'Запись создана успешно';
 		}
 
 		if ( isset( $_POST['date'] ) && ! empty( $_POST['date'] ) ) {
 			$data['date'] = $_POST['date'];
+            $format[]    = '%s'; // date
 		}
 
-		// todo prepare format
-		$insert = $wpdb->replace( $wpdb->prefix . 'ars_orders', $data );
+		$insert = $wpdb->replace( $wpdb->prefix . 'ars_orders', $data, $format );
 
 		if ( $insert === false ) {
+			Logger::error( 'Error while inserting data' );
 			wp_send_json_error( [ 'message' => 'Произошла ошибка #3. Пожалуйста, попробуйте позже.' ] );
 		}
 
 		if ( $insert === 0 ) {
+			Logger::error( 'No changes were made' );
 			wp_send_json_error( [ 'message' => 'Не было сделалано изменений' ] );
 		}
 
 		$inserted_id = $wpdb->insert_id;
 
 		if ( ! $inserted_id ) {
+			Logger::error( 'No ID was returned' );
 			wp_send_json_error( [ 'message' => 'Произошла ошибка #1. Пожалуйста, попробуйте позже.' ] );
 		}
 
@@ -209,9 +236,11 @@ class Ars_Service_Admin {
 		$form = $this->generate_form( $inserted_id );
 
 		if ( ! $form ) {
+			Logger::error( 'Error while generating form' );
 			wp_send_json_error( [ 'message' => 'Произошла ошибка #2. Пожалуйста, попробуйте позже.' ] );
 		}
 
+		Logger::info( 'Order was created successfully with data: ' . json_encode( $data ) );
 		wp_send_json_success( [ 'message' => $success_message, 'form_html' => $form ] );
 	}
 
@@ -279,12 +308,14 @@ class Ars_Service_Admin {
 
 		// check nonce
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'ars_service_nonce' ) ) {
+            Logger::error( 'Nonce error' );
 			wp_send_json_error( [ 'message' => 'Nonce error' ] );
 		}
 
 		$id = intval( $_POST['service_id'] );
 
 		if ( ! $id ) {
+            Logger::error( 'ID is empty' );
 			wp_send_json_error( [ 'message' => 'ID is empty' ] );
 		}
 
@@ -292,9 +323,15 @@ class Ars_Service_Admin {
 		// delete record from comments
 		global $wpdb;
 		$delete_order    = $wpdb->delete( $wpdb->prefix . 'ars_orders', [ 'id' => $id ] );
+        if ( $wpdb->last_error ) {
+            Logger::error( 'Error while deleting order from database: ' . $wpdb->last_error );
+        }
 		$delete_comments = $wpdb->delete( $wpdb->prefix . 'ars_comments', [ 'order_id' => $id ] );
-
+        if ( $wpdb->last_error ) {
+            Logger::error( 'Error while deleting comments from database: ' . $wpdb->last_error );
+        }
 		if ( $delete_order === false || $delete_comments === false ) {
+            Logger::error( 'Error while deleting data' );
 			wp_send_json_error( [ 'message' => 'Произошла ошибка #4. Пожалуйста, попробуйте позже.' ] );
 		}
 
@@ -318,6 +355,10 @@ class Ars_Service_Admin {
 			// get data from database
 			$order = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}ars_orders WHERE id = %d", $id ), ARRAY_A );
 
+            if ( $wpdb->last_error ) {
+                Logger::error( 'Error while getting data from database: ' . $wpdb->last_error );
+            }
+
 			if ( $order && is_array( $order ) && ! empty( $order ) ) {
 				$additional_info = unserialize( $order['additional_info'] );
 				$additional_info = is_array( $additional_info ) ? $additional_info : [];
@@ -325,6 +366,10 @@ class Ars_Service_Admin {
 
 			// get comments
 			$comments = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}ars_comments WHERE order_id = %d ORDER BY date DESC", $id ), ARRAY_A );
+
+            if ( $wpdb->last_error ) {
+                Logger::error( 'Error while getting comments from database: ' . $wpdb->last_error );
+            }
 
 		}
 
@@ -659,8 +704,5 @@ class Ars_Service_Admin {
 
         </form>
 		<?php return ob_get_clean();
-
 	}
-
-
 }

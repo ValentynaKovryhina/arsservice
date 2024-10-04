@@ -112,6 +112,11 @@ class Ars_Service {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-ars-service-i18n.php';
 
 		/**
+		 * The class responsible for logging.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-ars-service-logger.php';
+
+		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-ars-service-admin.php';
