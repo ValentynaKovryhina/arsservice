@@ -72,17 +72,41 @@ jQuery(document).ready(function ($) {
         });
     }
 
-    function searchInOrderTable() {
+    // function searchInOrderTable() {
+    //
+    //     $('#ars_search').on('input', function () {
+    //         var searchValue = $(this).val().toLowerCase();
+    //
+    //         $('#ars_orders_list tbody tr').each(function () {
+    //             var id = $(this).data('id').toString().toLowerCase();
+    //             var sn = $(this).data('sn').toString().toLowerCase();
+    //             var phone = $(this).data('phone').toString().toLowerCase();
+    //
+    //             if (id.startsWith(searchValue) || sn.startsWith(searchValue) || phone.startsWith(searchValue)) {
+    //                 $(this).show();
+    //             } else {
+    //                 $(this).hide();
+    //             }
+    //         });
+    //     });
+    // }
 
-        $('#ars_search').on('input', function () {
-            var searchValue = $(this).val().toLowerCase();
+    function searchInOrderTable() {
+        $('#ars_search, #ars_status_search').on('input change', function () {
+            var searchValue = $('#ars_search').val().toLowerCase();
+            var statusValue = $('#ars_status_search').val().toLowerCase(); // Получаем выбранное значение статуса
 
             $('#ars_orders_list tbody tr').each(function () {
                 var id = $(this).data('id').toString().toLowerCase();
                 var sn = $(this).data('sn').toString().toLowerCase();
                 var phone = $(this).data('phone').toString().toLowerCase();
+                var status = $(this).data('status').toString().toLowerCase(); // Получаем значение статуса ряда
 
-                if (id.startsWith(searchValue) || sn.startsWith(searchValue) || phone.startsWith(searchValue)) {
+                // Проверяем оба условия: и по текстовому поиску, и по статусу
+                if (
+                    (id.startsWith(searchValue) || sn.startsWith(searchValue) || phone.startsWith(searchValue)) &&
+                    (status === statusValue || statusValue === "") // Показываем все, если статус не выбран
+                ) {
                     $(this).show();
                 } else {
                     $(this).hide();
@@ -90,6 +114,7 @@ jQuery(document).ready(function ($) {
             });
         });
     }
+
 
     function deleteOrder() {
 

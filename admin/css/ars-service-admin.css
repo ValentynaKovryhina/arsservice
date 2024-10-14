@@ -104,6 +104,7 @@
 .ars_search_wrapper input,
 #ars_order_form textarea,
 #ars_order_form select,
+select#ars_status_search,
 #ars_order_form label,
 #ars_order_form input[type="checkbox"],
 #ars_order_form input[type="radio"] {
@@ -115,6 +116,7 @@
 .ars_search_wrapper input:focus,
 #ars_order_form textarea:focus,
 #ars_order_form select:focus,
+select#ars_status_search:focus,
 #ars_order_form input[type="checkbox"]:focus,
 #ars_order_form input[type="radio"]:focus {
     outline: none !important;
@@ -190,7 +192,8 @@
 #ars_order_form .ars_form_group:not(.ars_form_checkboxes_group) input:focus,
 .ars_search_wrapper input:focus,
 #ars_order_form textarea:focus,
-#ars_order_form select:focus {
+#ars_order_form select:focus,
+select#ars_status_search:focus {
     box-shadow: 0 0 0 1px var(--primary-color) !important;
     border: 1px solid var(--primary-color);
 }
@@ -313,6 +316,12 @@
 
 .ars_search_wrapper input {
     padding-right: 30px;
+    width: 200px;
+}
+
+.ars_form_group.ars_status_search {
+    width: 200px;
+    margin-right: 20px;
 }
 
 .ars_popup_delete_confirmation {
@@ -405,6 +414,10 @@
     color: var(--secondary-color);
 }
 
+.ars_manage_orders .button-primary {
+    margin-right: auto;
+}
+
 .wp-core-ui #ars_order_form .button-secondary,
 .ars_popup_buttons .button-secondary {
     color: var(--primary-color);
@@ -482,6 +495,30 @@
     }
 
     .ars_form_block .ars_comment {
+        margin-top: 10px;
+    }
+
+    .ars_manage_orders {
+        flex-direction: column;
+        align-items: stretch;
+        max-width: calc(100vw - 20px);
+    }
+
+    .ars_manage_orders .button-primary {
+        margin-right: 0;
+    }
+
+    .ars_form_group.ars_status_search {
+        width: 100%;
+        margin-right: 0;
+        margin-top: 10px;
+    }
+
+    .ars_search_wrapper input {
+        width: 100%;
+    }
+
+    .ars_search_wrapper {
         margin-top: 10px;
     }
 

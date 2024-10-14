@@ -23,6 +23,16 @@
             <a href="<?php echo admin_url( 'admin.php?page=ars-create-order' ); ?>"
                class="button button-primary"><?php _e( 'Создать', 'ars-service' ); ?></a>
 
+            <div class="ars_form_group ars_status_search">
+                <select id="ars_status_search" name="ars_status_search">
+                    <option value="" selected="">Все статусы</option>
+                    <option value="1">Принят на сервис</option>
+                    <option value="2">Ожидает детали</option>
+                    <option value="3">Готов</option>
+                    <option value="4">Выдан клиенту</option>
+                </select>
+            </div>
+
             <label class="ars_search_wrapper">
                 <input type="text" id="ars_search" name="ars_search"
                        value="" placeholder="<?php _e( 'Поиск заказа', 'ars-service' ); ?>">
@@ -52,7 +62,8 @@
 				<?php foreach ( $services as $service ) : ?>
                     <tr data-id="<?php echo mb_strtolower( $service['id'] ); ?>"
                         data-sn="<?php echo mb_strtolower( $service['sn'] ); ?>"
-                        data-phone="<?php echo isset( $service['phone'] ) && $service['phone'] ? mb_strtolower( $service['phone'] ) : ''; ?>">
+                        data-phone="<?php echo isset( $service['phone'] ) && $service['phone'] ? mb_strtolower( $service['phone'] ) : ''; ?>"
+                        data-status="<?php echo isset( $service['status'] ) && $service['status'] ? mb_strtolower( $service['status'] ) : 0; ?>">
                         <td><?php echo $service['id']; ?></td>
                         <td><?php echo $service['date']; ?></td>
                         <td><?php echo $service['device']; ?></td>
